@@ -13,9 +13,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Shop',
       theme: ThemeData(
+        primarySwatch: Colors.purple,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.purple
+        ),
+        colorScheme: ColorScheme.fromSwatch(accentColor: Colors.deepOrange),
+         fontFamily: 'Lato',
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
       ),
       home: ProductsOverviewScreen(),
     );

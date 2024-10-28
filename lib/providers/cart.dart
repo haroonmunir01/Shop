@@ -12,9 +12,17 @@ int get itemCount{
   return _items!.length;
 }
 
+double get totalAmount{
+  var total=0.0;
+  _items!.forEach((key, value) {
+    total+=value.price! * value.quantity!;
+  });
+  return total;
+}
+
 void addItem(String productId,String title,double price){
   if(_items!.containsKey(productId)){
-_items!.update(productId, (exsitingCartItem) => CartItem(id:exsitingCartItem.id, title: exsitingCartItem.title, quantity: (exsitingCartItem.quantity!+1), price: exsitingCartItem.price));
+_items!.update(productId, (existingCartItem) => CartItem(id:existingCartItem.id, title: existingCartItem.title, quantity: (existingCartItem.quantity!+1), price: existingCartItem.price));
   }
   else {
     _items?.putIfAbsent(productId, () => CartItem(id: DateTime.now().toString(), title: title, quantity: 1, price: price));

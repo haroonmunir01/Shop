@@ -29,4 +29,9 @@ _items!.update(productId, (existingCartItem) => CartItem(id:existingCartItem.id,
   }
   notifyListeners();
 }
+
+void removeItem(String productId){
+  _items!.remove(productId);
+  notifyListeners();
+}
 }

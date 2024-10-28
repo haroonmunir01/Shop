@@ -22,15 +22,20 @@ class CartScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Total',style: TextStyle(fontSize: 20,),),
-            Spacer(),
+            const Spacer(),
             Chip(label: Text('\$${cart.totalAmount}',style:const TextStyle(color:Colors.white ),),backgroundColor: Theme.of(context).primaryColor),
             TextButton(onPressed: (){}, child: Text('Order Now',style: TextStyle(color: Theme.of(context).primaryColor),),)
           ],
         ),
       ),
       ),
-          SizedBox(width: 10,),
-          Expanded(child: ListView.builder(itemCount:cart.itemCount,itemBuilder: (ctx,i)=>CartItems(id: cart.items.values.toList()[i]!.id, title: cart.items.values.toList()[i]!.title, quantity: cart.items.values.toList()[i]!.quantity, price: cart.items.values.toList()[i]!.price),))
+          const SizedBox(width: 10,),
+          Expanded(child: ListView.builder(itemCount:cart.itemCount,itemBuilder: (ctx,i)=>CartItems(
+              id: cart.items.values.toList()[i].id,
+              productId: cart.items.keys.toList()[i],
+              title: cart.items.values.toList()[i].title,
+              quantity: cart.items.values.toList()[i].quantity,
+              price: cart.items.values.toList()[i].price),))
         ],
       ),
     );

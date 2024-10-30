@@ -22,7 +22,7 @@ class ProductItem extends StatelessWidget {
                 onPressed: (){
                   product.toggleFavorite();
                 },
-                color: Colors.deepOrange,
+                color: Colors.purple,
               ),
             ),
             title: Text(product.title!,textAlign: TextAlign.center),
@@ -30,8 +30,18 @@ class ProductItem extends StatelessWidget {
               icon:const Icon(Icons.shopping_cart),
               onPressed: (){
                 cart.addItem(product.id!, product.title!,product.price!);
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:const Text('Item Added to the cart'),
+                  duration: const Duration(seconds: 3),
+                  action: SnackBarAction(label: 'UNDO', onPressed: (){
+                    cart.clearSingleItem(product.id!);
+                  }),
+
+                  )
+                );
               },
-              color: Theme.of(context).colorScheme.secondary,
+              color: Colors.purple,
             ),
           ),
           child: GestureDetector(

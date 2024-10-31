@@ -73,7 +73,8 @@ if(!_imageUrlFocusNode.hasFocus){
                   height: 100,
                   margin:const EdgeInsets.only(top:8,right: 10),
                   decoration: BoxDecoration(border: Border.all(width: 1,color: Colors.grey)),
-                  child: _imageUrlController.text.isEmpty ? Container(child: Text('Enter a URL'),):FittedBox(fit: BoxFit.cover,child: Image.network(_imageUrlController.text),),
+                  child: _imageUrlController.text.isEmpty ? Container(child: Text('Enter a URL'),):FittedBox(fit: BoxFit.fill,child: Image.network(_imageUrlController.text
+                  ),),
                 ),
                 Expanded(
                   child: TextFormField(

@@ -63,34 +63,50 @@ var _isLoading=false;
   }
   }
 
-  void _saveForm(){
-  print('Function triggered');
-      final valid=_form.currentState!.validate();
+  Future<void> _saveForm() async {
+    print('Function triggered');
+    final valid = _form.currentState!.validate();
+    if (!valid) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    _form.currentState!.save();
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false).updateProduct(_editedProduct.id!, _editedProduct);
       setState(() {
-        _isLoading=true;
+        _isLoading = false;
       });
-      if(!valid){
-            return;
-          }
-      _form.currentState!.save();
-      if(_editedProduct.id!=null){
-        Provider.of<Products>(context,listen: false).updateProduct(_editedProduct.id!,_editedProduct);
+      Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+    }
+    else {
+      try {
+        await Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+      }
+      catch (error) {
+        return await showDialog(context: context, builder: (ctx) =>
+            AlertDialog(
+              title:const Text('An error has occured'),
+              content:const Text('Unable to proceed at the moment'),
+              actions: [
+                TextButton(onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                    child:const Text('Okay'))
+              ],
+            ));
+      }
+      finally {
         setState(() {
-          _isLoading=false;
+          _isLoading = false;
         });
         Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+        print('ended');
       }
-      else{
-        Provider.of<Products>(context,listen:false).addProduct(_editedProduct).then((_){
-          setState(() {
-            _isLoading=false;
-          });
-          Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
-        });
-      }
-
-      print('ended');
     }
+  }
+
 @override
   void dispose() {
   _imageUrlFocusNode.removeListener(_updateImageUrl);

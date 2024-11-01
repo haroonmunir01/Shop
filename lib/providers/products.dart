@@ -54,25 +54,31 @@ class Products with ChangeNotifier{
     return _items.firstWhere((element) => element.id==id);
   }
 
-  Future<void> addProduct(Product product){
-    var url=Uri.https('flutter-update-e6249-default-rtdb.asia-southeast1.firebasedatabase.app','/products.json');
-   return http.post(url,body: json.encode({
-      'title':product.title,
-      'description':product.description,
-      'imageUrl':product.imageUrl,
-      'price':product.price,
-      'isFavorite':product.isFavorite,
-    }),).then((value){
+  Future<void> addProduct  (Product product) async {
+    var url = Uri.https(
+        'flutter-update-e6249-default-rtdb.asia-southeast1.firebasedatabase.app',
+        '/products.json');
+    try {
+      final value = await http.post(url, body: json.encode({
+        'title': product.title,
+        'description': product.description,
+        'imageUrl': product.imageUrl,
+        'price': product.price,
+        'isFavorite': product.isFavorite,
+      }),);
       print(json.decode(value.body));
-      final newProduct=Product(
+      final newProduct = Product(
           id: json.decode(value.body)['name'],
           title: product.title,
           description: product.description,
           price: product.price,
-          imageUrl:product.imageUrl);
+          imageUrl: product.imageUrl);
       _items.add(newProduct);
       notifyListeners();
-    });
+    }catch(error){
+      print(error.toString());
+      throw error;
+    }
   }
 
   void updateProduct(String id,Product newProduct){

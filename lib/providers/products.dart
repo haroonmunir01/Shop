@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop/providers/product.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class Products with ChangeNotifier{
@@ -51,7 +53,16 @@ class Products with ChangeNotifier{
   Product findById(String id){
     return _items.firstWhere((element) => element.id==id);
   }
+
   void addProduct(Product product){
+    var url=Uri.https('flutter-update-e6249-default-rtdb.asia-southeast1.firebasedatabase.app','/products.json');
+    http.post(url,body: json.encode({
+      'title':product.title,
+      'description':product.description,
+      'imageUrl':product.imageUrl,
+      'price':product.price,
+      'isFavorite':product.isFavorite,
+    }),);
     final newProduct=Product(
         id: DateTime.now().toString(),
         title: product.title,

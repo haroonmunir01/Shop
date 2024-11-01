@@ -25,6 +25,7 @@ var _initValues={
     'price':'',
     'imageUrl':'',
     };
+var _isLoading=false;
 
 @override
   void initState() {
@@ -65,18 +66,29 @@ var _initValues={
   void _saveForm(){
   print('Function triggered');
       final valid=_form.currentState!.validate();
-
+      setState(() {
+        _isLoading=true;
+      });
       if(!valid){
             return;
           }
       _form.currentState!.save();
       if(_editedProduct.id!=null){
         Provider.of<Products>(context,listen: false).updateProduct(_editedProduct.id!,_editedProduct);
+        setState(() {
+          _isLoading=false;
+        });
+        Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
       }
       else{
-        Provider.of<Products>(context,listen:false).addProduct(_editedProduct);
+        Provider.of<Products>(context,listen:false).addProduct(_editedProduct).then((_){
+          setState(() {
+            _isLoading=false;
+          });
+          Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+        });
       }
-      Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+
       print('ended');
     }
 @override
@@ -95,7 +107,7 @@ var _initValues={
       appBar: AppBar(title:const Text('Edit Products'),actions: [
         IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))
       ],),
-      body: Padding(
+      body: _isLoading ? const Center(child: CircularProgressIndicator(),): Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _form,
@@ -190,7 +202,7 @@ var _initValues={
                   height: 100,
                   margin:const EdgeInsets.only(top:8,right: 10),
                   decoration: BoxDecoration(border: Border.all(width: 1,color: Colors.grey)),
-                  child: _imageUrlController.text.isEmpty ? Container(child: Text('Enter a URL'),):FittedBox(fit: BoxFit.fill,child: Image.network(_imageUrlController.text
+                  child: _imageUrlController.text.isEmpty ? Container(child:const Text('Enter a URL'),):FittedBox(fit: BoxFit.fill,child: Image.network(_imageUrlController.text
                   ),),
                 ),
                 Expanded(
